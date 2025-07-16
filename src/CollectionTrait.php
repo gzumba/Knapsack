@@ -4,12 +4,15 @@ namespace DusanKasan\Knapsack;
 
 use DusanKasan\Knapsack\Exceptions\InvalidReturnValue;
 
+/**
+ * @template T
+ */
 trait CollectionTrait
 {
     /**
      * Converts $collection to array. If there are multiple items with the same key, only the last will be preserved.
      *
-     * @return array
+     * @return array<T>
      */
     public function toArray()
     {
@@ -20,9 +23,9 @@ trait CollectionTrait
      * Returns a lazy collection of items for which $function returned true.
      *
      * @param callable|null $function ($value, $key)
-     * @return Collection
+     * @return Collection<T>
      */
-    public function filter(callable $function = null)
+    public function filter(?callable $function = null)
     {
         return filter($this->getItems(), $function);
     }
@@ -30,7 +33,7 @@ trait CollectionTrait
     /**
      * Returns a lazy collection of distinct items. The comparison is the same as in in_array.
      *
-     * @return Collection
+     * @return Collection<T>
      */
     public function distinct()
     {
@@ -41,7 +44,7 @@ trait CollectionTrait
      * Returns a lazy collection with items from all $collections passed as argument appended together
      *
      * @param array|\Traversable ...$collections
-     * @return Collection
+     * @return Collection<T>
      */
     public function concat(...$collections)
     {

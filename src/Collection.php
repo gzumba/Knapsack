@@ -8,7 +8,11 @@ use DusanKasan\Knapsack\Exceptions\InvalidReturnValue;
 use IteratorAggregate;
 use Traversable;
 
-class Collection implements IteratorAggregate, \Serializable, CollectionInterface
+/**
+ * @template T
+ * @extends iterable<T>
+ */
+class Collection implements IteratorAggregate, CollectionInterface
 {
     use CollectionTrait;
 
@@ -44,8 +48,8 @@ class Collection implements IteratorAggregate, \Serializable, CollectionInterfac
     /**
      * Static alias of normal constructor.
      *
-     * @param callable|array|Traversable $input
-     * @return Collection
+     * @param callable|iterable<T>|Traversable<T> $input
+     * @return Collection<T>
      */
     public static function from($input)
     {
@@ -95,7 +99,7 @@ class Collection implements IteratorAggregate, \Serializable, CollectionInterfac
      * {@inheritdoc}
      * @throws InvalidReturnValue
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         if ($this->inputFactory) {
             $input = call_user_func($this->inputFactory);
@@ -114,10 +118,7 @@ class Collection implements IteratorAggregate, \Serializable, CollectionInterfac
         return $this->input;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function serialize()
+    public function __serialize()
     {
         return serialize(
             toArray(
@@ -131,10 +132,7 @@ class Collection implements IteratorAggregate, \Serializable, CollectionInterfac
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function unserialize($serialized)
+    public function __unserialize($serialized)
     {
         $this->input = dereferenceKeyValue(unserialize($serialized));
     }
